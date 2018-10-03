@@ -49,11 +49,18 @@ public class Controller {
         Double lat = Double.valueOf(strings[0]);
         Double lon = Double.valueOf(strings[1]);
         ArrayList<Taxist> taxists = new ArrayList<>(map.values());
-        taxists.sort((t1, t2) -> {
-            double d1 = (t1.getLat() - lat) * (t1.getLat() - lat) - (t1.getLon() - lon) * (t1.getLon() - lon);
-            double d2 = (t2.getLat() - lat) * (t2.getLat() - lat) - (t2.getLon() - lon) * (t2.getLon() - lon);
-            return Double.compare(d2, d1);
-        });
+        taxists.sort((t1, t2) -> Double.compare(quasiDistance(lat, lon, t2.getLat(), t2.getLon()), quasiDistance(lat, lon, t1.getLat(), t1.getLon())));
         return taxists;
     }
+
+    private double quasiDistance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        return Math.acos(dist);
+    }
+
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
 }
