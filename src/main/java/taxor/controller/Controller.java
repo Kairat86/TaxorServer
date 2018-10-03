@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import taxor.model.Taxist;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class Controller {
@@ -49,7 +46,7 @@ public class Controller {
         Double lat = Double.valueOf(strings[0]);
         Double lon = Double.valueOf(strings[1]);
         ArrayList<Taxist> taxists = new ArrayList<>(map.values());
-        taxists.sort((t1, t2) -> Double.compare(quasiDistance(lat, lon, t2.getLat(), t2.getLon()), quasiDistance(lat, lon, t1.getLat(), t1.getLon())));
+        taxists.sort(Comparator.comparingDouble(t -> quasiDistance(lat, lon, t.getLat(), t.getLon())));
         return taxists;
     }
 
