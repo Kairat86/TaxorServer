@@ -24,7 +24,6 @@ public class Controller {
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     private void remove(@RequestBody String phone) {
         phone = phone.substring(1, phone.length() - 1);
-        System.out.println("phone number=>" + phone);
         Taxist taxist = map.remove(phone);
         System.out.println("Taxist removed=>" + taxist);
         System.out.println("Total=>" + map.size());
@@ -34,14 +33,15 @@ public class Controller {
     private void sendCoords(@RequestBody String phoneLatLon) {
         String[] strings = phoneLatLon.substring(1, phoneLatLon.length() - 1).split(":");
         Taxist taxist = map.get(strings[0]);
+        if (taxist == null) {
+            taxist = new Taxist(strings[0]);
+        }
         taxist.setLat(strings[1]);
         taxist.setLon(strings[2]);
-        System.out.println("Updated coords of=>" + taxist);
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     private Collection<Taxist> get(@RequestBody String latLon) {
-        System.out.println("Get taxists=>" + map.values());
         String[] strings = latLon.substring(1, latLon.length() - 1).split(":");
         Double lat = Double.valueOf(strings[0]);
         Double lon = Double.valueOf(strings[1]);
