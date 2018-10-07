@@ -9,6 +9,9 @@ public class Taxist {
     private Double lat;
     private Double lon;
 
+    public Taxist() {
+    }
+
     public Taxist(String phone) {
         this.phone = phone;
     }
