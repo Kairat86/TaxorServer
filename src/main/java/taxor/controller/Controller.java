@@ -15,7 +15,6 @@ public class Controller {
 
     @RequestMapping(value = "/send", method = RequestMethod.POST)
     private boolean send(@RequestBody Taxist taxist) {
-        System.out.println("Taxist received=>" + taxist.toString());
         map.put(taxist.getPhone(), taxist);
         System.out.println("Total=>" + map.size());
         return true;
@@ -25,8 +24,6 @@ public class Controller {
     private void remove(@RequestBody String phone) {
         phone = phone.substring(1, phone.length() - 1);
         Taxist taxist = map.remove(phone);
-        System.out.println("Taxist removed=>" + taxist);
-        System.out.println("Total=>" + map.size());
     }
 
     @RequestMapping(value = "/send-coords", method = RequestMethod.POST)
@@ -47,7 +44,6 @@ public class Controller {
         Double lon = Double.valueOf(strings[1]);
         ArrayList<Taxist> taxists = new ArrayList<>(map.values());
         taxists.sort(Comparator.comparingDouble(t -> quasiDistance(lat, lon, t.getLat(), t.getLon())));
-        System.out.println("get=>" + taxists);
         return taxists;
     }
 
