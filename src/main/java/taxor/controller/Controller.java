@@ -47,6 +47,7 @@ public class Controller {
         Double lon = Double.valueOf(strings[1]);
         ArrayList<Taxist> taxists = new ArrayList<>(map.values());
         taxists.sort(Comparator.comparingDouble(t -> quasiDistance(lat, lon, t.getLat(), t.getLon())));
+        System.out.println("get=>" + taxists);
         return taxists;
     }
 
