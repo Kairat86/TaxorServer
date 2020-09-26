@@ -11,7 +11,7 @@ import java.util.*;
 @RestController
 public class Controller {
 
-    private Map<String, Taxist> map = new HashMap<>();
+    private final Map<String, Taxist> map = new HashMap<>();
 
     @RequestMapping(value = "/send", method = RequestMethod.POST)
     private boolean send(@RequestBody Taxist taxist) {
@@ -25,7 +25,7 @@ public class Controller {
     private void remove(@RequestBody String phone) {
         phone = phone.substring(1, phone.length() - 1);
         Taxist taxist = map.remove(phone);
-        System.out.println("Removed taxist+=>" + taxist);
+        System.out.println("Removed taxist=>" + taxist);
         System.out.println("Total=>" + map.size());
     }
 
@@ -35,16 +35,19 @@ public class Controller {
         Taxist taxist = map.get(strings[0]);
         if (taxist == null) {
             taxist = new Taxist(strings[0]);
+            map.put(strings[0], taxist);
         }
         taxist.setLat(strings[1]);
         taxist.setLon(strings[2]);
+        System.out.println("update=>" + taxist);
+        System.out.println("Total=>" + map.size());
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     private Collection<Taxist> get(@RequestBody String latLon) {
         String[] strings = latLon.substring(1, latLon.length() - 1).split(":");
-        Double lat = Double.valueOf(strings[0]);
-        Double lon = Double.valueOf(strings[1]);
+        double lat = Double.parseDouble(strings[0]);
+        double lon = Double.parseDouble(strings[1]);
         ArrayList<Taxist> taxists = new ArrayList<>(map.values());
         taxists.sort(Comparator.comparingDouble(t -> quasiDistance(lat, lon, t.getLat(), t.getLon())));
         return taxists;
@@ -56,7 +59,7 @@ public class Controller {
         return Math.acos(dist);
     }
 
-    private static double deg2rad(double deg) {
+    private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
 
